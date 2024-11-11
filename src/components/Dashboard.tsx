@@ -1,34 +1,28 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, logout } from '../firebase'; 
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null); 
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        
-        
-        setUser(currentUser); 
+        setUser(currentUser);  
       } else {
-        setUser(null); 
+        setUser(null);  
       }
-      setLoading(false); 
+      setLoading(false);
     });
 
-   
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    
     if (!loading && !user) {
-      
       navigate('/'); 
     }
   }, [loading, user, navigate]);
@@ -38,7 +32,6 @@ const Dashboard = () => {
     navigate('/'); 
   };
 
-  
   if (loading) {
     return <div>Loading...</div>; 
   }
